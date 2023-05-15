@@ -67,6 +67,7 @@ app.use("/api/carts", cartRoutes);
 app.use("/", viewsRouter);
 app.use("/users", usersHtmlRouter);
 app.use("/products", productsHtmlRoutes);
+app.use("/realTimeProducts", productsHtmlRoutes);
 
 
 app.get("*", (req, res) => {
