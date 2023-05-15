@@ -6,7 +6,7 @@ import { petsRouter } from "./routes/pets.router.js";
 import { usersHtmlRouter } from "./routes/users.html.router.js";
 import { productRouter } from "./routes/product.Routes.js";
 
-import { productsHtmlRouter } from "./routes/products.html.routes.js";
+import { productsHtmlRoutes } from "./routes/products.html.routes.js";
 
 import { productRoutes } from "./routes/product.Routes.js";
 import { cartRoutes } from "./routes/cart.Routes.js";
@@ -66,7 +66,7 @@ app.use("/api/carts", cartRoutes);
 //HTML RENDER SERVER SIDE
 app.use("/", viewsRouter);
 app.use("/users", usersHtmlRouter);
-app.use("/products", usersHtmlRouter);
+app.use("/products", productsHtmlRoutes);
 
 
 app.get("*", (req, res) => {
