@@ -1,11 +1,11 @@
 import express from "express";
-import { Router } from "express";
-const productRouter = Router(); 
 import { ProductManager } from "../appmanagers/productManager.js";
 const path = "src/db/products.json";
 const myProductManager = new ProductManager(path);
 import { checkRequest, checkNumberParams, checkCodeNotRepeated, } from "../middleware/validators.js";
 
+
+export const productRouter = express.Router();
 productRouter.get("/", async (req, res) => {
   try {
     const products = await myProductManager.getProducts();
@@ -19,12 +19,12 @@ productRouter.get("/", async (req, res) => {
         ? res.status(200).json({
             status: "success",
             payload: products.slice(0, limit),
-            data: productsArray,
+            data: products,
           })
         : res.status(200).json({
             status: "success",
             payload: products,
-            data: productsArray,
+            data: products,
           })
       : res.status(200).json({ status: "success", payload: [] });
   } catch (err) {
@@ -120,5 +120,3 @@ productRouter.delete("/:id", checkNumberParams, async (req, res) => {
   }
 });
 
-export { productRouter };
-export const productRoutes = express.Router();

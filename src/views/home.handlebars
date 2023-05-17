@@ -1,17 +1,17 @@
 <div>
-  <h4>LISTADO DE PRODUCTOS</h4>
+  <h1 class="title">TIENDA DE PRODUCTOS DEPORTIVOS</h1>
     {{#each productsArray}}
-        <div>
-            <p>
-                    <li>Title: {{this.title}}</li>
-                    <li>Description: {{this.description}}, </li>
-                    <li>Code: {{this.code}},</li>
-                    <li>Price: {{this.price}},</li>
-                    <li>Status: {{this.status}},</li>
-                    <li>Stock: {{this.stock}},</li>
-                    <li>Category: {{this.category}},</li>
-                    <li>Thumbnails: {{this.thumbnails}}, </li>
-            </p>
-        </div>
+    <ul style="margin-bottom:30px;">
+      <li>Titulo: {{title}}</li>
+      <li>Descripcion: {{description}}</li>
+      <li>Codigo: {{code}}</li>
+      <li>Precio: {{price}}</li>
+      <li>status: {{status}}</li>
+      <li>stock: {{stock}}</li>
+      <li>Categoria: {{category}}</li>
+      <li><img src="{{thumbnails}}" alt=""></li>
+    </ul>
     {{/each}}
 </div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

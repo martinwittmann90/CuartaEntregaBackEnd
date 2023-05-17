@@ -1,23 +1,25 @@
 import express from "express";
-import { __dirname } from "./utils.js";
-import handlebars from "express-handlebars";
 import path from "path";
-import { petsRouter } from "./routes/pets.router.js";
-import { usersHtmlRouter } from "./routes/users.html.router.js";
-import { productRouter } from "./routes/product.Routes.js";
-
+import { viewsRouter } from "./routes/views.routes.js";
 import { productsHtmlRoutes } from "./routes/products.html.routes.js";
-
-import { productRoutes } from "./routes/product.Routes.js";
+import { registerHtmlRoutes } from "./routes/register.html.routes.js";
+import { productRouter } from "./routes/product.Routes.js";
 import { cartRoutes } from "./routes/cart.Routes.js";
-
-import { usersRouter } from "./routes/users.router.js";
-import { viewsRouter } from "./routes/views.Routes.js";
-
 import { Server } from "socket.io";
-
+import handlebars from "express-handlebars";
+import { __dirname } from "./utils.js";
 const app = express();
 const PORT = 8080 || process.env.PORT;
+
+//middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+
+//usando el engine handlerbars
+app.engine("handlebars", handlebars.engine());
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "handlebars");
 
 const httpServer = app.listen(PORT, () => {
   console.log(`Server started on PORT ${PORT} at ${new Date().toLocaleString()}`);
@@ -25,14 +27,6 @@ const httpServer = app.listen(PORT, () => {
 
 const socketServer = new Server(httpServer);
 
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-
-app.engine("handlebars", handlebars.engine());
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "handlebars");
 
 //HANDLERS SOCKET
 socketServer.on("connection", (socket) => {
@@ -57,17 +51,13 @@ socketServer.on("connection", (socket) => {
 });
 
 //API REST CON JSON
-app.use("/api/users", usersRouter);
-app.use("/api/pets", petsRouter);
-
-app.use("/api/products", productRoutes);
+app.use("/api/products", productRouter);
 app.use("/api/carts", cartRoutes);
 
 //HTML RENDER SERVER SIDE
 app.use("/", viewsRouter);
-app.use("/users", usersHtmlRouter);
 app.use("/products", productsHtmlRoutes);
-app.use("/realTimeProducts", productsHtmlRoutes);
+app.use("/realTimeProducts", registerHtmlRoutes);
 
 
 app.get("*", (req, res) => {

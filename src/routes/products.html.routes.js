@@ -128,3 +128,4 @@ productsHtmlRoutes.get("/", (req, res) => {
   return res.status(200).render("products", { productsArray });
 });
 
+export { productsArray };
