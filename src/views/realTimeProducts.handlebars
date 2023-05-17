@@ -1,224 +1,35 @@
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
 
-<form id="form-products" style="margin: auto">
-  <div style="margin-bottom: 16px">
-    <div class="col-md-2 mx-auto">
-      <label for="title"> Titulo: </label>
-      <input
-        type="text"
-        name="title"
-        id="form-title"
-        style="margin-bottom: 16px"
-        class="form-control"
-      />
-    </div>
-    <div class="col-md-2 mx-auto">
-      <label for="price"> Precio: </label>
-      <input
-        type="number"
-        name="price"
-        id="form-price"
-        style="margin-bottom: 16px"
-        step="1"
-        class="form-control"
-      />
-    </div>
-    <div class="col-md-2 mx-auto">
-      <label for="thumbnail"> URL de la Imagen: </label>
-      <input
-        type="text"
-        name="thumbnail"
-        id="form-thumbnail"
-        style="margin-bottom: 16px"
-        class="form-control"
-      />
-    </div>
-    <div style="display: flex; justify-content: center; align-items: center">
-      <input type="submit" value="Crear producto" class="btn btn-primary" />
-    </div>
-  </div>
+<h1>REGISTRAR NUEVO PRODUCTO</h1>
+<form class= "styleForm" method="POST" action="/api/products" enctype="multipart/form-data">
+    <label for="title">Título:</label>
+    <input type="text" id="title" name="title"><br>
+    <label for="description">Descripción:</label>
+    <textarea id="description" name="description"></textarea><br>
+    <label for="code">Código:</label> 
+    <input type="text" id="code" name="code"><br>
+    <label for="price">Precio:</label>
+    <input type="number" id="price" name="price"><br>
+    <label for="stock">Stock:</label>
+    <input type="number" id="stock" name="stock"><br>
+    <label for="thumbnails">Imagen:</label>
+    <input type="file" id="thumbnails" name="thumbnails" required><br>
+    <input type="submit" value="Agregar producto">
 </form>
 
-<div>
-  {{!-- <h1>Hola {{name}}!!</h1> --}}
-  {{#if data}}
-    <h1 class="textProducts">Productos</h1>
-    <div class="products-container" id="products">
-    {{#each data}}
-      <div class="card" style="width: 18rem;">
-        <img src={{thumbnails}} class="card-img-top" alt="..." />
-        <div class="card-body">
-          <h5 class="card-title">{{title}}</h5>
-          <p class="card-text">${{price}}</p>
-          <a href="#" class="btn btn-primary">Add to cart</a>
-        </div>
-      </div>
-    {{/each}}
-    </div>
-  {{else}}
-    No hay productos
-  {{/if}}
-</div>
-
-<script src="/js/realTime.js"></script>
-
-
-{{!-- <div>
-    <h1>Product register</h1>
-    <form action="/products" method="POST">
-        <label for="title">title</label>
-        <input type="text" name="title" id="title">
-        <label for="description">description</label>
-        <input type="text" name="description" id="description">
-        <label for="code">code</label>
-        <input type="text" name="code" id="code">
-        <label for="status">status</label>
-        <input type="text" name="status" id="status">
-        <label for="stock">stock</label>
-        <input type="number" name="stock" id="stock">
-        <label for="category">category</label>
-        <input type="text" name="category" id="category">
-        <label for="thumbnails">thumbnails</label>
-        <input type="text" name="thumbnails" id="thumbnails">
-        <button type="submit">SEND</button>
-    </form>
-</div> --}}
-<!-- Dynamic List -->
-{{!--     <div id="productList">
-<div class="row">
-   <div class="col-md-8">
-    <table class="table table-light">
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Descripcion</th>
-          <th scope="col">Precio</th>
-          <th scope="col">Codigo</th>
-          <th scope="col">Stock</th>
-          <th scope="col">Categoria</th>
-          <th scope="col">Foto</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each productsArray}}
-        <tr>
-          <th scope="row">{{this.id}}</th>
-          <td>{{this.title}}</td>
-          <td>{{this.description}}</td>
-          <td>{{this.price}}</td>
-          <td>{{this.code}}</td>
-          <td>{{this.stock}}</td>
-          <td>{{this.category}}</td>
-          <td><img src={{this.thumbnail}} alt={{this.id}} style="width: 50px; min-height: 100%; max-height: 50px;"></td>
-        </tr>
-
-        {{/each}}
-      </tbody>
-    </table>
+<div id="cardContainer" idstyle="text-align: center;">
+  {{#each products}}
+  <div id={{this.id}}">
+    <ul>
+    <h2>{{this.title}}</h2>
+    <p>{{this.description}}</p>
+    <p>Precio: {{this.price}}</p>
+    <p>code: {{this.code}}</p>
+    <p>Stock: {{this.stock}}</p>
+    <p>Id: {{this.id}} </p>
+    </ul>
   </div>
-    <div class="col-md-4">
-      <h2 class="text-center my-4">Producto Nuevo</h2>
-      <form id="form-products" style="margin: auto">
-      <div style="margin-bottom: 16px">
-
-        <div class="col-md-auto mx-auto">
-          <label for="title"> Titulo: </label>
-          <br />
-          <input
-            type="text"
-            name="title"
-            id="form-title"
-            style="margin-bottom: 16px"
-            class="form-control"
-          />
-        </div>
-
-        <div class="col-md-auto mx-auto">
-        <label for="description"> Descripción: </label>
-          <br />
-          <input
-            type="text"
-            name="description"
-            id="form-description"
-            style="margin-bottom: 16px"
-            class="form-control"
-          />
-        </div>
-
-
-        <div class="col-md-auto mx-auto">
-          <label for="price"> Precio: </label>
-          <br />
-          <input
-            type="number"
-            name="price"
-            id="form-price"
-            style="margin-bottom: 16px"
-            step="1"
-            class="input-file"
-          />
-        </div>
-
-        <div class="col-md-auto mx-auto">
-          <label for="code"> Codigo: </label>
-          <br />
-          <input
-            type="text"
-            name="code"
-            id="form-code"
-            style="margin-bottom: 16px"
-            class="input-file"
-          />
-        </div>
-
-        <div class="col-md-auto mx-auto">
-          <label for="stock"> Stock: </label>
-          <br />
-          <input
-            type="number"
-            name="stock"
-            id="form-stock"
-            style="margin-bottom: 16px"
-            step="1"
-            class="input-file"
-          />
-        </div>
-
-        <div class="col-md-auto mx-auto">
-        <label for="category"> Categoria: </label>
-          <br />
-          <input
-            type="text"
-            name="category"
-            id="form-category"
-            style="margin-bottom: 16px"
-            class="form-control"
-          />
-        </div>
-
-        <div class="col-md-auto mx-auto">
-          <label for="thumbnail"> URL de la Imagen: </label>
-          <br />
-          <input
-            type="text"
-            name="thumbnail"
-            id="form-thumbnail"
-            style="margin-bottom: 16px"
-            class="input-file"
-          />
-        </div>
-        <div
-          style="display: flex; justify-content: center; align-items: center"
-        >
-          <input type="submit" value="Crear producto" class="btn btn-primary" />
-        </div>
-      </div>
-    </form>
-    </div>
+  {{/each}}
 </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
 <script src="/socket.io/socket.io.js"></script>
-<script src="public/js/index.js"></script> --}}
+<script src="/js/index.js"></script>
