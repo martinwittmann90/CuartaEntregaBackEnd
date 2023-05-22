@@ -9,7 +9,6 @@
         <p>Precio: {{this.price}}</p>
         <p>Stock: {{this.stock}}</p>
         <p>Categoria: {{this.category}}</p>
-        <button onclick="deleteProduct('{{this.id}}')">Eliminar</button>
       </div>
       {{/each}}
     </div>
@@ -31,4 +30,7 @@ function deleteProduct(productId) {
   });
 }
 </script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
 

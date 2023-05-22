@@ -1,83 +1,124 @@
-import { promises as fs } from "fs";
-import SyncFs from "fs";
-
+import { existsSync, promises } from "fs";
 
 class ProductManager {
-    constructor(path) {
-        this.path = path;
+    constructor(fileName) {
+      this.path = `./${fileName}`;
+      this.products = [...productList];
     }
-    writeProducts = async (data) => {
-        await fs.writeFile(this.path, JSON.stringify(data, null, 2));
+  
+    async getData() {
+      existsSync(this.path)
+        ? (this.products = JSON.parse(
+            await promises.readFile(this.path, "utf-8")
+          ))
+        : await promises.writeFile(this.path, JSON.stringify(this.products));
+  
+      return this.products;
     }
-    existProduct = async (id) => {
-        let answer = await this.getProducts();
-        let filter = answer.find((product) => product.id === id);
-        return filter;
+  
+    async addProduct(product) {
+      await this.getData();
+  
+      if (
+        !product.title ||
+        !product.description ||
+        !product.price ||
+        !product.thumbnail ||
+        !product.code ||
+        !product.stock ||
+        !product.category
+      ) {
+        return "The content of the fields is wrong.";
+      }
+  
+      if (this.products.some((item) => item.code === product.code)) {
+        return "Product already exists.";
+      }
+  
+      const maxId =
+        this.products.length > 0
+          ? Math.max(...this.products.map((p) => p.id))
+          : 0;
+      this.id = maxId + 1;
+  
+      let newProduct = { id: this.id, ...product, status: true };
+      this.products.push(newProduct);
+  
+      await promises.writeFile(
+        this.path,
+        JSON.stringify(this.products, null, 2)
+      );
+  
+      return "Product added successfully.";
     }
-    addProduct = async (product) => {
-        if (!product.title || !product.description || !product.price || !product.code || !product.stock) {
-            throw new Error("missing data");
-        }else if (product.id){
-            throw new Error("ID is being sent");
-        }
-        const products = await this.getProducts();
-        if (products.some((element) => element.code === product.code)) {
-            throw new Error("duplicate code");
-        } else {
-            product = { id: (Math.random() * 100000000000).toFixed(0), ...product };
-            product.status = 'true'
-            product.price = parseInt(product.price);
-            product.stock = parseInt(product.stock);
-            products.push(product);
-            const productString = JSON.stringify(products, null, 2)
-            await fs.writeFile(this.path, productString);
-            return product;
-        }
+  
+    async getProducts() {
+      await this.getData();
+      return this.products;
     }
-    getProducts = async () => {
-        if (!SyncFs.existsSync(this.path)) {
-            return [];
-        } else {
-            let answer = await fs.readFile(this.path, "utf-8");
-            return JSON.parse(answer);
-        }
+  
+    async getProductById(id) {
+      await this.getData();
+      let prodFound = this.products.find((p) => p.id === id);
+      if (!prodFound) {
+        return "Product not found.";
+      }
+      return prodFound;
     }
-    getProductById = async (id) => {
-        let answer = await this.getProducts();
-        let filter = answer.find((product) => product.id === id);
-        if (!filter) {
-            throw new Error ("Product not found");
-        } else {
-            return filter;
-        }
+  
+    async updateProduct(id, updatedProduct) {
+      await this.getData();
+      let prodIndex = this.products.findIndex((p) => p.id === id);
+  
+      if (prodIndex === -1) {
+        return "Product not found.";
+      }
+  
+      this.products[prodIndex] = {
+        ...this.products[prodIndex],
+        ...updatedProduct,
+      };
+  
+      await promises.writeFile(
+        this.path,
+        JSON.stringify(this.products, null, 2)
+      );
+  
+      return "Product updated successfully.";
     }
-    deleteProduct = async (id) => {
-        const products = await this.getProducts();
-        let productToDelete = products.find((product) => product.id === id);
-        if (!productToDelete) {
-            throw new Error("Product not found");
-        } else {
-            let productFilter = products.filter(products => products.id !== id);
-            const productString= JSON.stringify(productFilter,null,2);
-            await fs.writeFile(this.path, productString);
-            return "Product deleted";
-        }
+  
+    async deleteProduct(id) {
+      await this.getData();
+      const prodIndex = this.products.findIndex((p) => p.id === id);
+  
+      if (prodIndex === -1) {
+        return "Product not found.";
+      }
+  
+      this.products.splice(prodIndex, 1);
+      await promises.writeFile(
+        this.path,
+        JSON.stringify(this.products, null, 2)
+      );
+  
+      return "Product deleted successfully.";
     }
-    updateProduct = async (id, updateData) => {
-        const products = await this.getProducts();
-        const productIndex = products.findIndex(product => product.id == id);
-        if (productIndex !== -1) {
-            if (!products.some((element) => element.code === updateData.code)) {
-                products[productIndex] = { ...products[productIndex], ...updateData };
-                const productString = JSON.stringify(products, null, 2)
-                await fs.writeFile(this.path, productString);
-            } else {
-                throw new Error(`Duplicate code product`);
-            }
-        } else {
-            throw new Error(`Product not found with id`);
-        }
-    }
-}
-export default ProductManager;
+  }
+
+const productList = [
+  {
+    id: 1,
+    title: "Argentina",
+    description: "Camiseta",
+    price: "USD 100",
+    thumbnail: [
+      "https://i.ibb.co/JvbsxnS/short-argentina.png"
+    ],
+    code: "C0001",
+    stock: 5,
+    category: "X",
+    status: true
+  }
+];  
+export { ProductManager };
 

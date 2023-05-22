@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ProductManager from "../appManager/productManager.js";
+import {ProductManager} from "../appManager/productManager.js";
 import { uploader } from "../utils.js";
 
 const newProductManager = new ProductManager('./src/db/products.json');
@@ -7,6 +7,7 @@ export const productRouter = Router()
 
 productRouter.get("/", async (req, res) => {
     try {
+        
         const limit = req.query.limit
         const products = await newProductManager.getProducts();
         if (limit) {
@@ -89,4 +90,3 @@ productRouter.delete("/:id", async (req, res) => {
         }
     }
 });
-
