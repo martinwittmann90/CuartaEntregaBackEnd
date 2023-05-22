@@ -65,5 +65,5 @@ app.get('/*', async (req, res) => {
     return res.status(404).json({ status: 'error', message: 'incorrect route' })
   })
 
-export const productManager = new ProductManager("productos.json");
+export {newProductManager};
 

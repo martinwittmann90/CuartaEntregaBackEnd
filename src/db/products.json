@@ -128,5 +128,38 @@
       "https://i.ibb.co/p23whvt/short-francia-Photo-Room.png"
     ],
     "id": 10
+  },
+  {
+    "id": 11,
+    "title": "24234234",
+    "description": "2342342",
+    "price": 234234,
+    "thumbnail": "C:\\fakepath\\logo.png",
+    "code": "234234",
+    "stock": 234243,
+    "category": "234243",
+    "status": true
+  },
+  {
+    "id": 12,
+    "title": "ttt123123",
+    "description": "123231231",
+    "price": 12321,
+    "thumbnail": "C:\\fakepath\\logo.png",
+    "code": "321231231",
+    "stock": 123312,
+    "category": "231231231",
+    "status": true
+  },
+  {
+    "id": 13,
+    "title": "234234",
+    "description": "234234",
+    "price": 23423423,
+    "thumbnail": "C:\\fakepath\\logo.png",
+    "code": "234423432",
+    "stock": 234243432,
+    "category": "234234432",
+    "status": true
   }
 ]
