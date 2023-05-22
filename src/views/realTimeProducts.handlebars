@@ -14,14 +14,13 @@
     <label for="stock">Stock:</label>
     <input type="number" id="formStock" name="stock" placeholder="Agregar stock al producto">
     <label for="thumbnails">Imagen:</label>
-    <input type="text" id="thumbnails" name="thumbnails" required>
+    <input type="file" id="formThumbnails" name="thumbnails" required>
     <input type="submit" value="Agregar producto">
 </form>
 <div id="cardContainer" idstyle="text-align: center;">
   {{#each products}}
   <div id={{this.id}}>
   <div style="display: inline-block; margin: 10px; padding: 15px; border: 5px solid blue;">
-        <img src="{{this.thumbnails}}" alt="product image {{this.id}}" width="200" height="200">
         <h2>{{this.title}}</h2>
         <p>{{this.description}}</p>
         <p>Precio: {{this.price}}</p>

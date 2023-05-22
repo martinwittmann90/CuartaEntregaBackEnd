@@ -7,7 +7,7 @@ const inputPrice = document.getElementById("formPrice");
 const inputCode = document.getElementById("formCode");
 const inputStock = document.getElementById("formStock");
 const inputCategory = document.getElementById("formCategory");
-const inputThumbnail = document.getElementById("thumbnails");
+const inputThumbnail = document.getElementById("formThumbnails");
 
   formProducts.addEventListener ('submit', (e) => {
     e.preventDefault();
@@ -39,6 +39,7 @@ const inputThumbnail = document.getElementById("thumbnails");
     <p>Code: ${data.code}</p>
     <p>Stock: ${data.stock}</p>
     <p>Category: ${data.category}</p>
+    <img src="${data.thumbnails}">
     `;
     cardContainer.appendChild(newCard);
 });
