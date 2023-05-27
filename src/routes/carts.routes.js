@@ -1,18 +1,29 @@
 import { Router } from "express";
+const cartRouter = Router()
 import CartManager from "../appManager/cartManager.js";
+const path = "./src/db/carts.json";
+const cartManager = new CartManager(path);
 
-const cartManager = new CartManager('./src/db/carts.json');
-export const cartRouter = Router()
 
 cartRouter.post("/", async (req, res) => {
-    try {
-        const product = await cartManager.createCart();
-        return res.status(201).json({ mesage: "complete cart creation" });
-    } catch (error) {
-        if (error.message === "error, reading or writting file") {
-            res.status(409).json({ message: "cant create cart" })
-        }
-    }
+  /**Crea un carrito vacío de productos */
+  try {
+    const newCart = req.body;
+    const cartCreated = await cartManager.addCart(newCart);
+    cartCreated
+      ? res.status(201).json({
+          status: "success",
+          payload: cartCreated,
+        })
+      : res.json({
+          status: "error",
+        });
+  } catch (err) {
+    res.status(err.status || 500).json({
+      status: "error",
+      payload: err.message,
+    });
+  }
 });
 
 cartRouter.get("/", async (req, res) => {
@@ -55,3 +66,6 @@ cartRouter.delete("/:cartId/product/:productsId", async (req, res) => {
         }
     }
 });
+
+export default cartRouter;
+

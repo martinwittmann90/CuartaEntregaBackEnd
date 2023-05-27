@@ -1,30 +1,33 @@
+console.log("realTime js loaded");
 const socket = io();
 
-const formProducts = document.querySelector(".styleForm");
-const inputTitle = document.getElementById("formTitle");
-const inputDescript = document.getElementById("formDescription");
-const inputPrice = document.getElementById("formPrice");
-const inputCode = document.getElementById("formCode");
-const inputStock = document.getElementById("formStock");
-const inputCategory = document.getElementById("formCategory");
-const inputThumbnail = document.getElementById("formThumbnails");
+const form = document.getElementById("form");
 
-  formProducts.addEventListener ('submit', (e) => {
-    e.preventDefault();
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const title = form.elements.title.value;
+  const description = form.elements.description.value;
+  const price = form.elements.price.value;
+  const thumbnail = form.elements.thumbnail.value;
+  const code = form.elements.code.value;
+  const stock = form.elements.stock.value;
+  const category = form.elements.category.value;
     const newProductIncorporate = {
-      title: inputTitle.value,
-      description: inputDescript.value,
-      price: +inputPrice.value,
-      thumbnail: inputThumbnail.value,
-      code: inputCode.value,
-      stock: +inputStock.value,
-      category: inputCategory.value,
+      title,
+      description,
+      price,
+      thumbnail,
+      code,
+      stock,
+      category,
     };
+    console.log(newProductIncorporate);
     socket.emit("new-product", newProductIncorporate);
     formProducts.reset();
   });
 
-  socket.on("createProductSuccess", (data) => {
+  socket.on("refresh-products", (data) => {
+    console.log("refresh-products", data);
     const cardContainer = document.getElementById('cardContainer');
     let newCard = document.createElement('div');
     newCard.id = data.id;
@@ -42,13 +45,19 @@ const inputThumbnail = document.getElementById("formThumbnails");
     <img src="${data.thumbnails}">
     `;
     cardContainer.appendChild(newCard);
+
+    window.location.reload();
 });
 
-
-deleteProduct = (productId) => {
-  socket.emit("delete-product", productId);
-};
-
-socket.on("createProductFailure", (error) => {
-    alert(error);
-});
+function deleteProduct(id) {
+  fetch(`/api/products/${id}`, {
+    method: "DELETE",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      //reload page
+      window.location.reload();
+    })
+    .catch((err) => console.log(err));
+}

@@ -1,124 +1,113 @@
-import { existsSync, promises } from "fs";
+import fs from "fs";
 
 class ProductManager {
-    constructor(fileName) {
-      this.path = `./${fileName}`;
-      this.products = [...productList];
-    }
-  
-    async getData() {
-      existsSync(this.path)
-        ? (this.products = JSON.parse(
-            await promises.readFile(this.path, "utf-8")
-          ))
-        : await promises.writeFile(this.path, JSON.stringify(this.products));
-  
-      return this.products;
-    }
-  
-    async addProduct(product) {
-      await this.getData();
-  
-      if (
-        !product.title ||
-        !product.description ||
-        !product.price ||
-        !product.thumbnail ||
-        !product.code ||
-        !product.stock ||
-        !product.category
-      ) {
-        return "The content of the fields is wrong.";
-      }
-  
-      if (this.products.some((item) => item.code === product.code)) {
-        return "Product already exists.";
-      }
-  
-      const maxId =
-        this.products.length > 0
-          ? Math.max(...this.products.map((p) => p.id))
-          : 0;
-      this.id = maxId + 1;
-  
-      let newProduct = { id: this.id, ...product, status: true };
-      this.products.push(newProduct);
-  
-      await promises.writeFile(
-        this.path,
-        JSON.stringify(this.products, null, 2)
-      );
-  
-      return "Product added successfully.";
-    }
-  
-    async getProducts() {
-      await this.getData();
-      return this.products;
-    }
-  
-    async getProductById(id) {
-      await this.getData();
-      let prodFound = this.products.find((p) => p.id === id);
-      if (!prodFound) {
-        return "Product not found.";
-      }
-      return prodFound;
-    }
-  
-    async updateProduct(id, updatedProduct) {
-      await this.getData();
-      let prodIndex = this.products.findIndex((p) => p.id === id);
-  
-      if (prodIndex === -1) {
-        return "Product not found.";
-      }
-  
-      this.products[prodIndex] = {
-        ...this.products[prodIndex],
-        ...updatedProduct,
+  constructor(path) {
+    this.path = path;
+  }
+
+  async getProducts() {
+    return await this.read(this.file);
+  }
+
+  async getProductById(id) {
+    let allProductsArray = await this.read(this.file);
+    const product = allProductsArray.find((product) => product.id == id);
+    return product;
+  }
+
+  async addProduct(newProduct) {
+    let allProductsArray = await this.read(this.file);
+    let nextId = await this.getNextId(allProductsArray);
+    newProduct.id = nextId;
+    /**A todos los productos el backend le agrega status=true por default */
+    newProduct.status = true;
+    allProductsArray.push(newProduct);
+    await this.write(allProductsArray);
+    return newProduct;
+  }
+
+  async updateProduct(id, newProduct) {
+    let allProductsArray = await this.read(this.file);
+    console.log("productos", allProductsArray);
+    const productToUpdate = allProductsArray.find(
+      (product) => product.id == id
+    );
+    if (!productToUpdate) {
+      console.log("producto no encontrado", productToUpdate);
+      return {
+        status: "error",
+        message: "Sorry, no product found by id: " + id,
+        payload: {},
       };
-  
-      await promises.writeFile(
-        this.path,
-        JSON.stringify(this.products, null, 2)
-      );
-  
-      return "Product updated successfully.";
     }
-  
-    async deleteProduct(id) {
-      await this.getData();
-      const prodIndex = this.products.findIndex((p) => p.id === id);
-  
-      if (prodIndex === -1) {
-        return "Product not found.";
-      }
-  
-      this.products.splice(prodIndex, 1);
-      await promises.writeFile(
-        this.path,
-        JSON.stringify(this.products, null, 2)
-      );
-  
-      return "Product deleted successfully.";
+    newProduct = this.updateProductFields(productToUpdate, newProduct);
+    const index = allProductsArray.indexOf(productToUpdate);
+    allProductsArray[index] = newProduct;
+    await this.write(allProductsArray);
+    return newProduct;
+  }
+
+  async deleteProduct(id) {
+    let allProductsArray = await this.read(this.file);
+    const productToDelete = allProductsArray.find(
+      (product) => product.id == id
+    );
+    if (!productToDelete) {
+      return {
+        status: "error",
+        message: "Sorry, no product found by id: " + id,
+        payload: {},
+      };
+    }
+    const index = allProductsArray.indexOf(productToDelete);
+    allProductsArray.splice(index, 1);
+    await this.write(allProductsArray);
+    return productToDelete;
+  }
+
+  updateProductFields(productToUpdate, newProduct) {
+    /** 🗨 Los campos que se repiten los actualiza,
+     * los que no (como el id o status) los deja igual */
+    const updatedProduct = {
+      ...productToUpdate,
+      ...newProduct,
+    };
+    return updatedProduct;
+  }
+
+  async read() {
+    let allProductsArray = [];
+    try {
+      let allProductsString = await fs.promises.readFile(this.path, "utf-8");
+      allProductsString.length > 0
+        ? (allProductsArray = JSON.parse(allProductsString))
+        : (allProductsArray = []);
+    } catch (err) {
+      console.log("Error en la lectura del archivo", err);
+    }
+    return allProductsArray;
+  }
+
+  async write(allProductsArray) {
+    let allProductsString = JSON.stringify(allProductsArray, null, 2);
+    try {
+      await fs.promises.writeFile(this.path, allProductsString);
+    } catch (err) {
+      console.log("Error en la escritura", err);
     }
   }
 
-const productList = [
-  {
-    id: 1,
-    title: "Argentina",
-    description: "Camiseta",
-    price: "USD 100",
-    thumbnail: [
-      "https://i.ibb.co/JvbsxnS/short-argentina.png"
-    ],
-    code: "C0001",
-    stock: 5,
-    category: "X",
-    status: true
+  async getNextId(allProductsArray) {
+    let lastId = 0;
+    // recorro allProductsArray y guardo todos los ids en un array nuevo. Luego busco el máximo
+    const allIdsArray = allProductsArray.map((product) => product.id);
+    // me quedo solo con los id numericos, elimino los NaN, null y undefined
+    allIdsArray.filter((id) => typeof id === "number");
+    if (allIdsArray.length > 0) {
+      lastId = Math.max(...allIdsArray);
+    }
+    return lastId + 1;
   }
-];  
-export { ProductManager };
+}
 
+export default ProductManager;

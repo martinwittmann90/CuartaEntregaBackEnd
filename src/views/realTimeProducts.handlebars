@@ -1,36 +1,134 @@
-
 <h1>REGISTRAR NUEVO PRODUCTO</h1>
-<form class= "styleForm">
-    <label for="title">Título:</label>
-    <input type="text" id="formTitle" name="title" placeholder="Agregar un titulo al producto" >
-    <label for="description">Descripción:</label>
-    <textarea id="formDescription" name="description" placeholder="Agregar un descripción al producto"></textarea>
-    <label for="category">Categoria:</label>
-    <input type="text" id="formCategory" name="category" placeholder="Agregar una categoria al producto">
-    <label for="code">Código:</label> 
-    <input type="text" id="formCode" name="code" placeholder="Agregar un código al producto">
-    <label for="price">Precio:</label>
-    <input type="number" id="formPrice" name="price" placeholder="Agregar un precio al producto" >
-    <label for="stock">Stock:</label>
-    <input type="number" id="formStock" name="stock" placeholder="Agregar stock al producto">
-    <label for="thumbnails">Imagen:</label>
-    <input type="file" id="formThumbnails" name="thumbnails" required>
-    <input type="submit" value="Agregar producto">
-</form>
-<div id="cardContainer" idstyle="text-align: center;">
-  {{#each products}}
-  <div id={{this.id}}>
-  <div style="display: inline-block; margin: 10px; padding: 15px; border: 5px solid blue;">
-        <h2>{{this.title}}</h2>
-        <p>{{this.description}}</p>
-        <p>Precio: {{this.price}}</p>
-        <p>Stock: {{this.stock}}</p>
-        <p>Categoria: {{this.category}}</p>
-        <p>Id: {{this.id}} </p>
-        <button onclick="deleteProduct({{this.id}})">Eliminar</button>
+<section>
+  <div class="container mt-6" style="max-width: 500px">
+    <form id="form" class= "styleForm">
+        <h3 class="is-size-3 mb-5">Ingrese un nuevo producto</h3>
+          <div class="field">
+            <label for="title" class="label">Título</label>
+            <div class="control has-icons-left has-icons-right">
+              <input
+                class="input is-success"
+                type="text"
+                placeholder="Agregar un titulo al producto"
+                value=""
+                name="title"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Descripción</label>
+            <div class="control has-icons-left has-icons-right">
+              <textarea
+                value=""
+                name="description"
+                class="textarea is-success"
+                placeholder="Ingrese una breve descripción del producto"
+                rows="3"
+              ></textarea>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Código</label>
+            <div class="control has-icons-left has-icons-right">
+              <input
+                class="input is-success"
+                type="text"
+                placeholder="Ingrese el código del producto"
+                value=""
+                name="code"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Precio</label>
+            <div class="control has-icons-left has-icons-right">
+              <input
+                class="input is-success"
+                type="text"
+                placeholder="Ingrese el precio del producto"
+                value=""
+                name="price"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Stock</label>
+            <div class="control has-icons-left has-icons-right">
+              <input
+                class="input is-success"
+                type="number"
+                min="0"
+                max="10000"
+                value="0"
+                name="stock"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Categoría</label>
+            <div class="control has-icons-left has-icons-right">
+              <div class="select is-primary">
+                <select name="category">
+                  <option value="Camisetas">Camisetas</option>
+                  <option value="Shorts">Shorts</option>
+                  <option value="Medias">Medias</option>
+                  <option value="Botines">Botines</option>
+                  <option value="Camperas">Camperas</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <div class="file is-boxed">
+                <label class="file-label">
+                  <input class="file-input" type="file" name="thumbnail" />
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <ion-icon
+                        name="cloud-upload-outline"
+                        style="font-size: 25px"
+                      ></ion-icon>
+                    </span>
+                    <span class="file-label">Subir imágen</span>
+                  </span>
+                </label>
+              </div>
+            </div>
       </div>
+            <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-primary is-light">Guardar</button>
+        </div>
+      </div>
+    </form>
   </div>
-  {{/each}}
-</div>
+</section>
+<section class="mt-6">
+  <div id="cardContainer" idstyle="text-align: center;" class="container is-flex is-flex-wrap-wrap">
+    {{#each products}}
+            <div class="card" style="width: 150px; margin: 20px">
+        <div class="card-image" style="padding: 15px">
+          <figure class="image is-4by3">
+            <img src="{{this.thumbnails}}" alt="product image" width="200" height="200">
+          </figure>
+        </div>
+        <div class="card-content" >
+          <div class="media">
+            <div class="media-content">
+              <p class="title is-6">Nombre: {{title}}</p>
+              <p class="subtitle is-6">Descripción: {{description}}</p>
+              <p class="subtitle is-6">Precio: {{price}}</p>
+              <p class="subtitle is-6">Stock: {{stock}}</p>
+              <p class="subtitle is-6">Categoria: {{category}}</p>
+              <p class="subtitle is-6">ID: {{id}}</p>
+            </div>
+          </div>
+          <button class="button is-small" type="button" onclick="deleteProduct({{id}})">
+          <ion-icon name="trash"></ion-icon></button>
+
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</section>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/index.js"></script>
