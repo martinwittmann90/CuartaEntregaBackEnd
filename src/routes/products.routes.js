@@ -6,9 +6,6 @@ const newProductManager = new ProductManager('./src/db/products.json');
 import { validateNumber } from "../utils/utils.js";
 import { checkRequest, checkCodeNotRepeated, checkNumberParams, } from "../middleware/validators.js";
 
-
-/**Multer config */
-// 'photo' es el nombre del campo en el formulario.
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, "src/public/uploads");
@@ -17,8 +14,6 @@ const storage = multer.diskStorage({
       cb(null, file.originalname);
     },
   });
-  router.use(multer({ storage }).single("thumbnail"));
-
 
 router.get("/", async (req, res) => {
     try {
@@ -72,8 +67,7 @@ router.post("/", checkRequest, checkCodeNotRepeated, async (req, res) => {
         const photo = req.file;
         console.log(newProduct);
         console.log(photo);
-        //  antes de guardar el objeto le añado la propiedad para que se pueda acceder a la foto.
-        newProduct.thumbnail = "/uploads/" + photo.filename;
+        newProduct.thumbnails = "/uploads/" + photo.filename;
         const productCreated = await newProductManager.addProduct(newProduct);
         console.log(productCreated);
         res.redirect("/");

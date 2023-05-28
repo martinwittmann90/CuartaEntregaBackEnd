@@ -6,7 +6,6 @@ const cartManager = new CartManager(path);
 
 
 cartRouter.post("/", async (req, res) => {
-  /**Crea un carrito vacío de productos */
   try {
     const newCart = req.body;
     const cartCreated = await cartManager.addCart(newCart);
@@ -52,7 +51,6 @@ cartRouter.post("/:cartId/product/:productsId", async (req, res) => {
         } 
     }
 });
-
 
 cartRouter.delete("/:cartId/product/:productsId", async (req, res) => {
     try {

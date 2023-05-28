@@ -130,13 +130,13 @@
     "id": 10
   },
   {
-    "title": "www",
-    "description": "www",
-    "price": "1",
-    "thumbnail": "C:\\fakepath\\Captura de pantalla 2022-12-03 210510.png",
-    "code": "ww",
-    "stock": "1",
-    "category": "Medias",
+    "title": "qqq",
+    "description": "qq",
+    "price": "111",
+    "thumbnails": "https://i.ibb.co/p23whvt/short-francia-Photo-Room.png",
+    "code": "qqq",
+    "stock": "11",
+    "category": "Camisetas",
     "id": 11,
     "status": true
   }

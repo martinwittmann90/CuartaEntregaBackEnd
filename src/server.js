@@ -1,5 +1,4 @@
 //IMPORTS
-/* const newProductManager = new ProductManager('./src/db/products.json'); */
 import express from 'express'
 import morgan from "morgan";
 import { Server as SocketServer } from "socket.io";
@@ -7,7 +6,6 @@ import http from "http";
 import {apiRouter} from "./routes/api.routes.js";
 import {viewsRouter} from "./routes/view.Routes.js";
 import websockets from "./websockets/websockets.js";
-import handlebars from 'express-handlebars';
 import exphbs from "express-handlebars";
 import { dirname } from "path";
 import { fileURLToPath } from "url";

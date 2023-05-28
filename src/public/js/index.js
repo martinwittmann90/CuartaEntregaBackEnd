@@ -1,4 +1,3 @@
-console.log("realTime js loaded");
 const socket = io();
 
 const form = document.getElementById("form");
@@ -8,7 +7,7 @@ form.addEventListener("submit", (event) => {
   const title = form.elements.title.value;
   const description = form.elements.description.value;
   const price = form.elements.price.value;
-  const thumbnail = form.elements.thumbnail.value;
+  const thumbnails = form.elements.thumbnails.value;
   const code = form.elements.code.value;
   const stock = form.elements.stock.value;
   const category = form.elements.category.value;
@@ -16,7 +15,7 @@ form.addEventListener("submit", (event) => {
       title,
       description,
       price,
-      thumbnail,
+      thumbnails,
       code,
       stock,
       category,
@@ -56,7 +55,6 @@ function deleteProduct(id) {
     .then((res) => res.json())
     .then((data) => {
       console.log(data);
-      //reload page
       window.location.reload();
     })
     .catch((err) => console.log(err));

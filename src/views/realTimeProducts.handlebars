@@ -5,68 +5,39 @@
         <h3 class="is-size-3 mb-5">Ingrese un nuevo producto</h3>
           <div class="field">
             <label for="title" class="label">Título</label>
-            <div class="control has-icons-left has-icons-right">
-              <input
-                class="input is-success"
-                type="text"
-                placeholder="Agregar un titulo al producto"
-                value=""
-                name="title"
-              />
+            <div class="control">
+              <input class="input is-success" type="text" placeholder="Agregar un titulo al producto" value="" name="title"/>
             </div>
           </div>
           <div class="field">
             <label class="label">Descripción</label>
-            <div class="control has-icons-left has-icons-right">
-              <textarea
-                value=""
-                name="description"
-                class="textarea is-success"
-                placeholder="Ingrese una breve descripción del producto"
-                rows="3"
-              ></textarea>
+            <div class="control">
+              <textarea value="" name="description" class="textarea is-success" placeholder="Ingrese una breve descripción del producto" rows="3"></textarea>
             </div>
           </div>
           <div class="field">
             <label class="label">Código</label>
-            <div class="control has-icons-left has-icons-right">
-              <input
-                class="input is-success"
-                type="text"
-                placeholder="Ingrese el código del producto"
-                value=""
-                name="code"
-              />
+            <div class="control">
+              <input class="input is-success" type="text" placeholder="Ingrese el código del producto" value="" name="code"/>
             </div>
           </div>
           <div class="field">
             <label class="label">Precio</label>
-            <div class="control has-icons-left has-icons-right">
+            <div class="control">
               <input
-                class="input is-success"
-                type="text"
-                placeholder="Ingrese el precio del producto"
-                value=""
-                name="price"
-              />
+                class="input is-success" type="text" placeholder="Ingrese el precio del producto" value="" name="price"/>
             </div>
           </div>
           <div class="field">
             <label class="label">Stock</label>
-            <div class="control has-icons-left has-icons-right">
+            <div class="control">
               <input
-                class="input is-success"
-                type="number"
-                min="0"
-                max="10000"
-                value="0"
-                name="stock"
-              />
+                class="input is-success" type="number" min="0" max="10000" value="0" name="stock"/>
             </div>
           </div>
           <div class="field">
             <label class="label">Categoría</label>
-            <div class="control has-icons-left has-icons-right">
+            <div class="control">
               <div class="select is-primary">
                 <select name="category">
                   <option value="Camisetas">Camisetas</option>
@@ -77,26 +48,17 @@
                 </select>
               </div>
             </div>
-            <div class="field">
-              <div class="file is-boxed">
-                <label class="file-label">
-                  <input class="file-input" type="file" name="thumbnail" />
-                  <span class="file-cta">
-                    <span class="file-icon">
-                      <ion-icon
-                        name="cloud-upload-outline"
-                        style="font-size: 25px"
-                      ></ion-icon>
-                    </span>
-                    <span class="file-label">Subir imágen</span>
-                  </span>
-                </label>
-              </div>
+          <div class="field">
+            <label class="label">Imágen</label>
+            <div class="control">
+              <input class="input is-success" type="text" placeholder="Ingrese una url con la imágen del producto" value="" name="thumbnails"/>
             </div>
-      </div>
+          </div>
+            {{!-- <label for="thumbnails">Imagen:</label>
+                <input type="file" id="thumbnails" name="thumbnails" required> --}}
             <div class="field is-grouped">
         <div class="control">
-          <button class="button is-primary is-light">Guardar</button>
+          <button class="button is-primary is-light">Agregar</button>
         </div>
       </div>
     </form>
@@ -108,7 +70,7 @@
             <div class="card" style="width: 150px; margin: 20px">
         <div class="card-image" style="padding: 15px">
           <figure class="image is-4by3">
-            <img src="{{this.thumbnails}}" alt="product image" width="200" height="200">
+            <img src="{{thumbnails}}" alt="product image" width="200" height="200">
           </figure>
         </div>
         <div class="card-content" >
@@ -124,7 +86,6 @@
           </div>
           <button class="button is-small" type="button" onclick="deleteProduct({{id}})">
           <ion-icon name="trash"></ion-icon></button>
-
         </div>
       </div>
     {{/each}}

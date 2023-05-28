@@ -1,7 +1,5 @@
 import { promises as fs } from "fs";
 import SyncFs from "fs";
-
-
 class CartManager {
 
     constructor(path) {
@@ -14,9 +12,7 @@ class CartManager {
         } else {
             let answer = await fs.readFile(this.path, "utf-8");
             return JSON.parse(answer);
-        }
-    }
-
+        }}
     createCart = async () => {
         try {
             const carts = await this.getCarts();
@@ -28,8 +24,7 @@ class CartManager {
         } catch (error) {
             console.log(error);
             throw new Error("error, reading or writting file");
-        }
-    }
+        }}
 
     addProductToCart = async (cartId, productsId) => {
         try {
@@ -49,8 +44,7 @@ class CartManager {
         } catch (error) {
             console.log(error);
             throw new Error('General error');
-        }
-    }
+        }}
 
 
 removeProductFromCart = async (cartId, productsId) => {
@@ -74,9 +68,6 @@ removeProductFromCart = async (cartId, productsId) => {
     } catch (error) {
             console.log(error);
             throw new Error('General error');
-        }
-    }
-}
-
+        }}}
 
 export default CartManager;

@@ -19,7 +19,6 @@ class ProductManager {
     let allProductsArray = await this.read(this.file);
     let nextId = await this.getNextId(allProductsArray);
     newProduct.id = nextId;
-    /**A todos los productos el backend le agrega status=true por default */
     newProduct.status = true;
     allProductsArray.push(newProduct);
     await this.write(allProductsArray);
@@ -66,8 +65,6 @@ class ProductManager {
   }
 
   updateProductFields(productToUpdate, newProduct) {
-    /** 🗨 Los campos que se repiten los actualiza,
-     * los que no (como el id o status) los deja igual */
     const updatedProduct = {
       ...productToUpdate,
       ...newProduct,
@@ -99,9 +96,7 @@ class ProductManager {
 
   async getNextId(allProductsArray) {
     let lastId = 0;
-    // recorro allProductsArray y guardo todos los ids en un array nuevo. Luego busco el máximo
     const allIdsArray = allProductsArray.map((product) => product.id);
-    // me quedo solo con los id numericos, elimino los NaN, null y undefined
     allIdsArray.filter((id) => typeof id === "number");
     if (allIdsArray.length > 0) {
       lastId = Math.max(...allIdsArray);
